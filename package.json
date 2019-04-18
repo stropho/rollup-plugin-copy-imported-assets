@@ -1,0 +1,22 @@
+{
+  "name": "rollup-plugin-copy-imported-assets",
+  "version": "1.0.0",
+  "description": "Copy asssets imported as es-modules",
+  "main": "dist/copy-imported-assets.cjs.js",
+  "module": "dist/copy-imported-assets.esm.js",
+  "scripts": {
+    "build": "rollup -c=rollup.config.js",
+    "test": "npx jest"
+  },
+  "author": "Stropho",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/runtime": "^7.4.3",
+    "babel-jest": "^24.7.1",
+    "jest": "^24.7.1",
+    "rollup": "^1.10.0",
+    "rollup-plugin-babel": "^4.3.2"
+  }
+}
