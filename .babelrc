@@ -3,9 +3,6 @@
     "production": {
       "presets": [
         ["@babel/preset-env", {
-          "targets": {
-            "browsers": ["last 2 versions", "safari >= 7"]
-          },
          "modules": "false"
         }]
       ],
@@ -13,11 +10,11 @@
     "test": {
       "presets": [
         ["@babel/preset-env", {
-          "targets": {
-            "browsers": ["last 2 versions", "safari >= 7"]
-          },
           "modules": "commonjs" // commonjs for jest test ...
-        }]
+        }],
+      ],
+      "plugins": [
+        ["@babel/plugin-transform-runtime", { "regenerator": true }],
       ],
     }
   }
