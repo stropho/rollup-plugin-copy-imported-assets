@@ -5,7 +5,7 @@
   "main": "dist/copy-imported-assets.cjs.js",
   "module": "dist/copy-imported-assets.esm.js",
   "scripts": {
-    "build": "rollup -c=rollup.config.js",
+    "build": "npx rollup -c=rollup.config.js",
     "test": "npx jest"
   },
   "author": "Stropho",
