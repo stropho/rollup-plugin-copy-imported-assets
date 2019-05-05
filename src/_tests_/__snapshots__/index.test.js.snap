@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`warnings warns about missing include/exclude options 1`] = `"No options to include files were specified - ignoring all"`;
+
+exports[`warnings warns about unsupported output format 1`] = `"Only format 'esm' is supported, others should NOT be used with this plugin"`;
