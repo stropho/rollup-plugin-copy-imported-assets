@@ -18,6 +18,7 @@ export default function copyImportedAssets(options = {}) {
     filter: isIgnoringAll ? () => false : createFilter(options.include, options.exclude),
     isIgnoringAll,
     transformAsset: /* options.transformAsset || */ readFileSync,
+    absPathToAssetId: {},
   };
 
   return {
@@ -38,10 +39,19 @@ export default function copyImportedAssets(options = {}) {
       if (!state.filter(id)) return null;
 
       const importerDir = dirname(importer);
-      const assetPath = resolve(importerDir, id);
-      const fileName = basename(id);
-      // copy the asset
-      const assetId = this.emitAsset(fileName, state.transformAsset(assetPath));
+      const assetAbsPath = resolve(importerDir, id);
+      // in case the asset content changes, we won't know :(
+      // but that's ok because there not a reasonable use-case
+      // why this plugin should run in watch mode
+      const isEmitted = Object.prototype.hasOwnProperty.call(state.absPathToAssetId, assetAbsPath);
+      if (!isEmitted) {
+        // copy the asset
+        const fileName = basename(id);
+        const assetId = this.emitAsset(fileName, state.transformAsset(assetAbsPath));
+        state.absPathToAssetId[assetAbsPath] = assetId;
+      }
+      const assetId = state.absPathToAssetId[assetAbsPath];
+
       // temporarily, keep it as an external virtual module
       return { id: `${VIRTUAL_MODULE}/${assetId}`, external: true };
     },
