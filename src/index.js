@@ -1,7 +1,12 @@
 
 import { createFilter } from 'rollup-pluginutils';
 import { readFileSync } from 'fs';
-import { resolve, dirname, normalize } from 'path';
+import {
+  resolve,
+  dirname,
+  normalize,
+  basename,
+} from 'path';
 
 // using `\0` to keep the virtual module accessible only in this plugin
 const VIRTUAL_MODULE = '\0copy-imported-assets-virtual-placeholder';
@@ -34,8 +39,9 @@ export default function copyImportedAssets(options = {}) {
 
       const importerDir = dirname(importer);
       const assetPath = resolve(importerDir, id);
+      const fileName = basename(id);
       // copy the asset
-      const assetId = this.emitAsset(id, state.transformAsset(assetPath));
+      const assetId = this.emitAsset(fileName, state.transformAsset(assetPath));
       // temporarily, keep it as an external virtual module
       return { id: `${VIRTUAL_MODULE}/${assetId}`, external: true };
     },

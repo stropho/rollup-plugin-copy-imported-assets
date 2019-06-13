@@ -76,6 +76,28 @@ describe('importing-asset', () => {
   });
 });
 
+describe('importing-parent-asset', () => {
+  it('generates esm output with external asset that has relative path', async () => {
+    const inputOptions = {
+      input: 'src/_tests_/fixture/importing-parent-asset/index.js',
+      plugins: [
+        copyImportedAssets({ include: /\.myext/ }),
+        babel(BABEL_OPTIONS),
+      ],
+    };
+
+    const bundle = await rollup(inputOptions);
+    const { output } = await bundle.generate(OUTPUT_OPTIONS);
+
+    expect(output.length).toBe(2);
+    expect(output[0].imports.length).toBe(1);
+    expect(output[0].code.includes('from \'./assets/asset-b7235ae7.myext\'')).toBeTruthy();
+
+    expect(output[1].isAsset).toBeTruthy();
+    expect(output[1].fileName.endsWith('/asset-b7235ae7.myext')).toBeTruthy();
+  });
+});
+
 // describe('importing-asset-and-transforming', () => {
 //   it('generates esm output with external css asset generated from other file', async () => {
 //     const inputOptions = {
