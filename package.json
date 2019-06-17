@@ -6,11 +6,15 @@
   "module": "dist/copy-imported-assets.esm.js",
   "scripts": {
     "build": "npx rollup -c=rollup.config.js",
+    "prepublishOnly": "npm run build",
     "test:lint": "npx eslint src/",
     "test:unit": "npx jest",
     "test:tdd": "npm run test:unit -- --no-cache --watch",
     "test": "npm run test:lint && npm run test:unit"
   },
+  "files": [
+    "dist/"
+  ],
   "author": "Stropho",
   "license": "MIT",
   "devDependencies": {
