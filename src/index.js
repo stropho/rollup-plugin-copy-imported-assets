@@ -47,7 +47,11 @@ export default function copyImportedAssets(options = {}) {
       if (!isEmitted) {
         // copy the asset
         const fileName = basename(id);
-        const assetId = this.emitAsset(fileName, state.transformAsset(assetAbsPath));
+        const assetId = this.emitFile({
+          type: 'asset',
+          source: state.transformAsset(assetAbsPath),
+          name: fileName,
+        });
         state.absPathToAssetId[assetAbsPath] = assetId;
       }
       const assetId = state.absPathToAssetId[assetAbsPath];
