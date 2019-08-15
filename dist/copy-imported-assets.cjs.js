@@ -4,16 +4,24 @@ var rollupPluginutils = require('rollup-pluginutils');
 var fs = require('fs');
 var path = require('path');
 
+/* eslint-disable import/prefer-default-export */
+const removeEmptyImport = (code, importPath) => {
+  // regexp for import with trailing spaces, but only 1 \n
+  const re = new RegExp(`[^\\S\n]*import\\s*(["'])${importPath}\\1;?[^\\S\n]*\n?`, 'g');
+  return code.replace(re, '');
+};
+
 const VIRTUAL_MODULE = '\0copy-imported-assets-virtual-placeholder';
 function copyImportedAssets(options = {}) {
   const isIgnoringAll = !options.include && !options.exclude;
   const state = {
+    keepEmptyImports: options.keepEmptyImports || false,
     filter: isIgnoringAll ? () => false : rollupPluginutils.createFilter(options.include, options.exclude),
     isIgnoringAll,
     transformAsset:
     /* options.transformAsset || */
     fs.readFileSync,
-    absPathToAssetId: {}
+    absPathToToAssetId: {}
   };
   return {
     name: 'copy-imported-assets',
@@ -35,13 +43,19 @@ function copyImportedAssets(options = {}) {
       if (!state.filter(id)) return null;
       const importerDir = path.dirname(importer);
       const assetAbsPath = path.resolve(importerDir, id); // in case the asset content changes, we won't know :(
+      // but that's ok because there not a reasonable use-case
+      // why this plugin should run in watch mode
 
-      const isAssetEmited = Object.prototype.hasOwnProperty.call(state.absPathToAssetId, assetAbsPath);
+      const isEmitted = Object.prototype.hasOwnProperty.call(state.absPathToAssetId, assetAbsPath);
 
-      if (!isAssetEmited) {
+      if (!isEmitted) {
         // copy the asset
         const fileName = path.basename(id);
-        const assetId = this.emitAsset(fileName, state.transformAsset(assetAbsPath));
+        const assetId = this.emitFile({
+          type: 'asset',
+          source: state.transformAsset(assetAbsPath),
+          name: fileName
+        });
         state.absPathToAssetId[assetAbsPath] = assetId;
       }
 
@@ -56,10 +70,17 @@ function copyImportedAssets(options = {}) {
     renderChunk(code, chunkInfo) {
       const importsToReplace = chunkInfo.imports.filter(i => i.startsWith(VIRTUAL_MODULE));
       if (!importsToReplace.length) return null;
-      return importsToReplace.reduce((codeResult, i) => {
-        const assetId = i.replace(`${VIRTUAL_MODULE}/`, '');
+      return importsToReplace.reduce((codeResult, importPath) => {
+        const assetId = importPath.replace(`${VIRTUAL_MODULE}/`, '');
         const assetName = this.getAssetFileName(assetId);
-        return codeResult.replace(i, `./${path.normalize(assetName)}`);
+        let reducedCode = codeResult;
+
+        if (!state.keepEmptyImports) {
+          reducedCode = removeEmptyImport(reducedCode, importPath);
+        }
+
+        reducedCode = reducedCode.replace(importPath, `./${path.normalize(assetName)}`);
+        return reducedCode;
       }, code);
     }
 
