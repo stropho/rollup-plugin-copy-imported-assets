@@ -8,6 +8,8 @@ import {
   basename,
 } from 'path';
 
+import { removeEmptyImport } from './utils';
+
 // using `\0` to keep the virtual module accessible only in this plugin
 const VIRTUAL_MODULE = '\0copy-imported-assets-virtual-placeholder';
 
@@ -15,6 +17,7 @@ export default function copyImportedAssets(options = {}) {
   const isIgnoringAll = !options.include && !options.exclude;
 
   const state = {
+    keepEmptyImports: options.keepEmptyImports || false,
     filter: isIgnoringAll ? () => false : createFilter(options.include, options.exclude),
     isIgnoringAll,
     transformAsset: /* options.transformAsset || */ readFileSync,
@@ -55,20 +58,27 @@ export default function copyImportedAssets(options = {}) {
         state.absPathToAssetId[assetAbsPath] = assetId;
       }
       const assetId = state.absPathToAssetId[assetAbsPath];
-
       // temporarily, keep it as an external virtual module
-      return { id: `${VIRTUAL_MODULE}/${assetId}`, external: true };
+      return {
+        id: `${VIRTUAL_MODULE}/${assetId}`,
+        external: true,
+      };
     },
     renderChunk(code, chunkInfo) {
-      const importsToReplace = chunkInfo.imports.filter(i => i.startsWith(VIRTUAL_MODULE));
+      const importsToReplace = chunkInfo.imports.filter((i) => i.startsWith(VIRTUAL_MODULE));
 
       if (!importsToReplace.length) return null;
-
-      return importsToReplace.reduce((codeResult, i) => {
-        const assetId = i.replace(`${VIRTUAL_MODULE}/`, '');
+      return importsToReplace.reduce((codeResult, importPath) => {
+        const assetId = importPath.replace(`${VIRTUAL_MODULE}/`, '');
         const assetName = this.getAssetFileName(assetId);
 
-        return codeResult.replace(i, `./${normalize(assetName)}`);
+        let reducedCode = codeResult;
+        if (!state.keepEmptyImports) {
+          reducedCode = removeEmptyImport(reducedCode, importPath);
+        }
+        reducedCode = reducedCode.replace(importPath, `./${normalize(assetName)}`);
+
+        return reducedCode;
       }, code);
     },
   };

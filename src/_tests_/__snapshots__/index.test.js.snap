@@ -2,6 +2,10 @@
 
 exports[`importing-asset generates esm output with external asset 1`] = `"assets/asset-f1618825.myext"`;
 
+exports[`importing-asset-to-a-shared-chunk generates 4 files importing asset also in entry points 1`] = `"assets/asset-f1618825.myext"`;
+
+exports[`importing-asset-to-a-shared-chunk generates 4 files importing asset only once 1`] = `"assets/asset-f1618825.myext"`;
+
 exports[`importing-parent-asset generates esm output with external asset that has relative path 1`] = `"assets/asset-f1618825.myext"`;
 
 exports[`importing-same-asset generates esm output with single external asset imported multiple times 1`] = `"assets/asset-f1618825.myext"`;

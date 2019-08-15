@@ -60,6 +60,22 @@ export default () => // component using css variable
 
 In conlusion, the source has to be processed with another bundler again
 
+## Options
+### include + exclude
+Default: no files are matched - you have to provide something
+For more details see [rollup-pluginutils](https://github.com/rollup/rollup-pluginutils#createfilter). FYI. Regexp should work.
+
+### keepEmptyImports
+
+Type: `boolean`
+Default: `false`
+
+This is helpful because how rollup handles imports for multiple chunks/entry points.
+
 ## License
 
 MIT
+
+### TODO
+
+- rollup as dependency so the correct version is used for this plugin
