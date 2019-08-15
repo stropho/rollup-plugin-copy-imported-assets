@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`importing-asset generates esm output with external asset 1`] = `"assets/asset-f1618825.myext"`;
+
+exports[`importing-parent-asset generates esm output with external asset that has relative path 1`] = `"assets/asset-f1618825.myext"`;
+
+exports[`importing-same-asset generates esm output with single external asset imported multiple times 1`] = `"assets/asset-f1618825.myext"`;
+
 exports[`warnings warns about missing include/exclude options 1`] = `"No options to include files were specified - ignoring all"`;
 
 exports[`warnings warns about unsupported output format 1`] = `"Only format 'esm' is supported, others should NOT be used with this plugin"`;

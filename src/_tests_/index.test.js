@@ -68,11 +68,15 @@ describe('importing-asset', () => {
     const { output } = await bundle.generate(OUTPUT_OPTIONS);
 
     expect(output.length).toBe(2);
-    expect(output[0].imports.length).toBe(1);
-    expect(output[0].code.includes('from \'./assets/asset-b7235ae7.myext\'')).toBeTruthy();
 
     expect(output[1].isAsset).toBeTruthy();
-    expect(output[1].fileName.endsWith('/asset-b7235ae7.myext')).toBeTruthy();
+    const assetFileName = output[1].fileName;
+
+    expect(/\/asset-\w+.myext/.test(assetFileName)).toBeTruthy();
+    expect(output[1].fileName).toMatchSnapshot();
+
+    expect(output[0].imports.length).toBe(1);
+    expect(output[0].code.includes(`from './${assetFileName}'`)).toBeTruthy();
   });
 });
 
@@ -90,11 +94,15 @@ describe('importing-parent-asset', () => {
     const { output } = await bundle.generate(OUTPUT_OPTIONS);
 
     expect(output.length).toBe(2);
-    expect(output[0].imports.length).toBe(1);
-    expect(output[0].code.includes('from \'./assets/asset-b7235ae7.myext\'')).toBeTruthy();
 
     expect(output[1].isAsset).toBeTruthy();
-    expect(output[1].fileName.endsWith('/asset-b7235ae7.myext')).toBeTruthy();
+    const assetFileName = output[1].fileName;
+
+    expect(/\/asset-\w+.myext/.test(assetFileName)).toBeTruthy();
+    expect(output[1].fileName).toMatchSnapshot();
+
+    expect(output[0].imports.length).toBe(1);
+    expect(output[0].code.includes(`from './${assetFileName}'`)).toBeTruthy();
   });
 });
 
@@ -112,11 +120,15 @@ describe('importing-same-asset', () => {
     const { output } = await bundle.generate(OUTPUT_OPTIONS);
 
     expect(output.length).toBe(2);
-    expect(output[0].imports.length).toBe(1);
-    expect(output[0].code.includes('from \'./assets/asset-b7235ae7.myext\'')).toBeTruthy();
 
     expect(output[1].isAsset).toBeTruthy();
-    expect(output[1].fileName.endsWith('/asset-b7235ae7.myext')).toBeTruthy();
+    const assetFileName = output[1].fileName;
+
+    expect(/\/asset-\w+.myext/.test(assetFileName)).toBeTruthy();
+    expect(output[1].fileName).toMatchSnapshot();
+
+    expect(output[0].imports.length).toBe(1);
+    expect(output[0].code.includes(`from './${assetFileName}'`)).toBeTruthy();
   });
 });
 
