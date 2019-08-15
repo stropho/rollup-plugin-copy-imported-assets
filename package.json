@@ -6,6 +6,7 @@
   "module": "dist/copy-imported-assets.esm.js",
   "scripts": {
     "build": "npx rollup -c=rollup.config.js",
+    "version": "sh ./tools/update-changelog.sh && git add CHANGELOG.md",
     "prepublishOnly": "npm run build",
     "test:lint": "npx eslint src/",
     "test:unit": "npx jest",
