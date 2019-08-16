@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+ - fix relative path calculation in shared chunks
 
 ## [1.1.0]
  - use new rollup api: `emitFile` instead of `emitAsset`
@@ -9,5 +10,5 @@ All notable changes to this project will be documented in this file.
     The feature is there by design in rollup. But it could cause troubles for non-js files
  - script to automaticaly update changelog for `npm verion [type]`
 
-[1.0.0]
+## [1.0.0]
  - Initial Realease

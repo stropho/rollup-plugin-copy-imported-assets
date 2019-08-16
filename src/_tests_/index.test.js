@@ -16,8 +16,9 @@ const OUTPUT_OPTIONS = {
 const OUTPUT_OPTIONS_TO_DIR = {
   dir: './output',
   format: 'esm',
-  // to easily test the file names
-  chunkFileNames: '[name].js',
+  // no hash to easily test the file names
+  // in another folder to, test relative paths
+  chunkFileNames: 'chunks/[name].js',
 };
 
 describe('warnings', () => {
@@ -166,11 +167,11 @@ describe('importing-asset-to-a-shared-chunk', () => {
     expect(asset.fileName).toMatchSnapshot();
 
     // examine asset-import
-    expect(fileNames).toContain('asset-import.js');
-    const assetImportFileIndex = fileNames.findIndex((name) => name === 'asset-import.js');
+    expect(fileNames).toContain('chunks/asset-import.js');
+    const assetImportFileIndex = fileNames.findIndex((name) => name === 'chunks/asset-import.js');
     const assetImport = output[assetImportFileIndex];
     expect(assetImport.imports).toHaveLength(1);
-    expect(assetImport.code).toContain(asset.fileName);
+    expect(assetImport.code).toContain(`'./../${asset.fileName}`);
     // examine entry1
     expect(fileNames).toContain('entry1.js');
     const entry1FileIndex = fileNames.findIndex((name) => name === 'entry1.js');
@@ -184,7 +185,7 @@ describe('importing-asset-to-a-shared-chunk', () => {
     expect(entry2.code).toContain(assetImport.fileName);
     expect(entry1.code).not.toContain(asset.fileName);
   });
-  it('generates 4 files importing asset also in entry points', async () => {
+  it('generates 4 files, importing asset also in entry points', async () => {
     const inputOptions = {
       input: {
         entry1: 'src/_tests_/fixture/importing-asset-to-multiple-chunks/entry1.js',
@@ -211,11 +212,11 @@ describe('importing-asset-to-a-shared-chunk', () => {
     expect(asset.fileName).toMatchSnapshot();
 
     // examine asset-import
-    expect(fileNames).toContain('asset-import.js');
-    const assetImportFileIndex = fileNames.findIndex((name) => name === 'asset-import.js');
+    expect(fileNames).toContain('chunks/asset-import.js');
+    const assetImportFileIndex = fileNames.findIndex((name) => name === 'chunks/asset-import.js');
     const assetImport = output[assetImportFileIndex];
     expect(assetImport.imports).toHaveLength(1);
-    expect(assetImport.code).toContain(asset.fileName);
+    expect(assetImport.code).toContain(`'./../${asset.fileName}`);
     // examine entry1
     expect(fileNames).toContain('entry1.js');
     const entry1FileIndex = fileNames.findIndex((name) => name === 'entry1.js');

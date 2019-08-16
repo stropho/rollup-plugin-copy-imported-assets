@@ -2,10 +2,11 @@
 import { createFilter } from 'rollup-pluginutils';
 import { readFileSync } from 'fs';
 import {
-  resolve,
+  basename,
   dirname,
   normalize,
-  basename,
+  relative,
+  resolve,
 } from 'path';
 
 import { removeEmptyImport } from './utils';
@@ -65,18 +66,19 @@ export default function copyImportedAssets(options = {}) {
       };
     },
     renderChunk(code, chunkInfo) {
+      const chunkPath = dirname(chunkInfo.fileName);
       const importsToReplace = chunkInfo.imports.filter((i) => i.startsWith(VIRTUAL_MODULE));
 
       if (!importsToReplace.length) return null;
       return importsToReplace.reduce((codeResult, importPath) => {
         const assetId = importPath.replace(`${VIRTUAL_MODULE}/`, '');
-        const assetName = this.getAssetFileName(assetId);
+        const assetName = this.getFileName(assetId);
 
         let reducedCode = codeResult;
         if (!state.keepEmptyImports) {
           reducedCode = removeEmptyImport(reducedCode, importPath);
         }
-        reducedCode = reducedCode.replace(importPath, `./${normalize(assetName)}`);
+        reducedCode = reducedCode.replace(importPath, `./${normalize(relative(chunkPath, assetName))}`);
 
         return reducedCode;
       }, code);
