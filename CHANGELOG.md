@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [1.2.0]
  - fix relative path calculation in shared chunks
 
 ## [1.1.0]
