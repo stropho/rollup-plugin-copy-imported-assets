@@ -1,6 +1,6 @@
 import { createFilter } from 'rollup-pluginutils';
 import { readFileSync } from 'fs';
-import { dirname, resolve, basename, normalize } from 'path';
+import { dirname, resolve, basename, normalize, relative } from 'path';
 
 /* eslint-disable import/prefer-default-export */
 const removeEmptyImport = (code, importPath) => {
@@ -19,7 +19,7 @@ function copyImportedAssets(options = {}) {
     transformAsset:
     /* options.transformAsset || */
     readFileSync,
-    absPathToToAssetId: {}
+    absPathToAssetId: {}
   };
   return {
     name: 'copy-imported-assets',
@@ -66,18 +66,19 @@ function copyImportedAssets(options = {}) {
     },
 
     renderChunk(code, chunkInfo) {
+      const chunkPath = dirname(chunkInfo.fileName);
       const importsToReplace = chunkInfo.imports.filter(i => i.startsWith(VIRTUAL_MODULE));
       if (!importsToReplace.length) return null;
       return importsToReplace.reduce((codeResult, importPath) => {
         const assetId = importPath.replace(`${VIRTUAL_MODULE}/`, '');
-        const assetName = this.getAssetFileName(assetId);
+        const assetName = this.getFileName(assetId);
         let reducedCode = codeResult;
 
         if (!state.keepEmptyImports) {
           reducedCode = removeEmptyImport(reducedCode, importPath);
         }
 
-        reducedCode = reducedCode.replace(importPath, `./${normalize(assetName)}`);
+        reducedCode = reducedCode.replace(importPath, `./${normalize(relative(chunkPath, assetName))}`);
         return reducedCode;
       }, code);
     }

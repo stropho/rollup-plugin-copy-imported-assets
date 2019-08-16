@@ -21,7 +21,7 @@ function copyImportedAssets(options = {}) {
     transformAsset:
     /* options.transformAsset || */
     fs.readFileSync,
-    absPathToToAssetId: {}
+    absPathToAssetId: {}
   };
   return {
     name: 'copy-imported-assets',
@@ -68,18 +68,19 @@ function copyImportedAssets(options = {}) {
     },
 
     renderChunk(code, chunkInfo) {
+      const chunkPath = path.dirname(chunkInfo.fileName);
       const importsToReplace = chunkInfo.imports.filter(i => i.startsWith(VIRTUAL_MODULE));
       if (!importsToReplace.length) return null;
       return importsToReplace.reduce((codeResult, importPath) => {
         const assetId = importPath.replace(`${VIRTUAL_MODULE}/`, '');
-        const assetName = this.getAssetFileName(assetId);
+        const assetName = this.getFileName(assetId);
         let reducedCode = codeResult;
 
         if (!state.keepEmptyImports) {
           reducedCode = removeEmptyImport(reducedCode, importPath);
         }
 
-        reducedCode = reducedCode.replace(importPath, `./${path.normalize(assetName)}`);
+        reducedCode = reducedCode.replace(importPath, `./${path.normalize(path.relative(chunkPath, assetName))}`);
         return reducedCode;
       }, code);
     }
