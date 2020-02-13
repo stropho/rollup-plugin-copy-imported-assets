@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [1.3.0]
  - fix npm audit volnurabilities, npm packages upgrade
 
 ## [1.2.0]
