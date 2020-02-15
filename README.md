@@ -58,7 +58,7 @@ import css from 'assets/styles-hashfoobar.sass'
 export default () => // component using css variable
 ```
 
-In conlusion, the source has to be processed with another bundler again
+In conlusion, the built source has to be processed with another bundler again
 
 ## Options
 ### include + exclude

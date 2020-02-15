@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+ - add `repository.url` to `package.json`
 
 ## [1.3.0]
  - fix npm audit volnurabilities, npm packages upgrade
