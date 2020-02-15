@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [1.3.1]
  - add `repository.url` to `package.json`
 
 ## [1.3.0]
