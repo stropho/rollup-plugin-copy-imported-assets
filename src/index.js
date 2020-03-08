@@ -32,7 +32,9 @@ export default function copyImportedAssets(options = {}) {
         this.warn('No options to include files were specified - ignoring all');
       }
 
-      if (outputOptions.format !== 'es') {
+      // with rollup@2, we get here whatever the developer sends
+      // via output options (including aliases)
+      if (!['es', 'esm', 'module'].includes(outputOptions.format)) {
         this.warn('Only format \'esm\' is supported, '
           + 'others should NOT be used with this plugin');
       }

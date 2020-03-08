@@ -76,7 +76,7 @@ describe('importing-asset', () => {
 
     expect(output.length).toBe(2);
 
-    expect(output[1].isAsset).toBeTruthy();
+    expect(output[1].type).toBe('asset');
     const assetFileName = output[1].fileName;
 
     expect(/\/asset-\w+.myext/.test(assetFileName)).toBeTruthy();
@@ -102,7 +102,7 @@ describe('importing-parent-asset', () => {
 
     expect(output.length).toBe(2);
 
-    expect(output[1].isAsset).toBeTruthy();
+    expect(output[1].type).toBe('asset');
     const assetFileName = output[1].fileName;
 
     expect(/\/asset-\w+.myext/.test(assetFileName)).toBeTruthy();
@@ -128,7 +128,7 @@ describe('importing-same-asset', () => {
 
     expect(output.length).toBe(2);
 
-    expect(output[1].isAsset).toBeTruthy();
+    expect(output[1].type).toBe('asset');
     const assetFileName = output[1].fileName;
 
     expect(/\/asset-\w+.myext/.test(assetFileName)).toBeTruthy();
@@ -163,7 +163,7 @@ describe('importing-asset-to-a-shared-chunk', () => {
     expect(fileNames).toContainEqual(expect.stringMatching(assetFileNameRe));
     const assetFileIndex = fileNames.findIndex((name) => assetFileNameRe.test(name));
     const asset = output[assetFileIndex];
-    expect(asset.isAsset).toBeTruthy();
+    expect(asset.type).toBe('asset');
     expect(asset.fileName).toMatchSnapshot();
 
     // examine asset-import
@@ -208,7 +208,7 @@ describe('importing-asset-to-a-shared-chunk', () => {
     expect(fileNames).toContainEqual(expect.stringMatching(assetFileNameRe));
     const assetFileIndex = fileNames.findIndex((name) => assetFileNameRe.test(name));
     const asset = output[assetFileIndex];
-    expect(asset.isAsset).toBeTruthy();
+    expect(asset.type).toBe('asset');
     expect(asset.fileName).toMatchSnapshot();
 
     // examine asset-import

@@ -78,4 +78,5 @@ MIT
 
 ### TODO
 
-- rollup as dependency so the correct version is used for this plugin
+- support sourcemaps
+- move work from plugin to rollup@2 itself

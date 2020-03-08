@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+ - fix tests and `output.options` handling, so the plugin is compatible with both rollup v1 and v2
 
 ## [1.3.1]
  - add `repository.url` to `package.json`
