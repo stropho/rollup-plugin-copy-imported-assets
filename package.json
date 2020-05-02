@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-copy-imported-assets",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Copy asssets imported as es-modules",
   "main": "dist/copy-imported-assets.cjs.js",
   "module": "dist/copy-imported-assets.esm.js",
